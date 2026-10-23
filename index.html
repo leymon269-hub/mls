@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Vice-Versa</title>
+<style>
+  body { margin:0; min-height:100vh; display:flex; flex-direction:column;
+         align-items:center; justify-content:center; background:#1c1b2e;
+         color:#fff; font-family:Georgia,serif; text-align:center; padding:20px; }
+  h1 { font-weight:normal; font-size:1.4rem; margin-bottom:20px; }
+  .cadre { width:100%; max-width:560px; aspect-ratio:16/9; }
+  iframe { width:100%; height:100%; border:0; border-radius:12px; }
+</style>
+</head>
+<body>
+<h1 id="titre"></h1>
+<div class="cadre"><iframe id="lecteur" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
+
+<script>
+// === A MODIFIER PLUS TARD : remplace les identifiants YouTube par les tiens ===
+const VIDEOS = {
+  joie:      ["IDENTIFIANT_1"],
+  amour:     ["IDENTIFIANT_1"],
+  tristesse: ["IDENTIFIANT_1"],
+  stress:    ["IDENTIFIANT_1"],
+  doute:     ["IDENTIFIANT_1"],
+  sommeil:   ["IDENTIFIANT_1"],
+  colere:    ["IDENTIFIANT_1"]
+};
+const TITRES = {
+  joie:"Pour sourire", amour:"Pour toi", tristesse:"Je suis là",
+  stress:"Une pause", doute:"Ce que je vois", sommeil:"Bonne nuit", colere:"Respire"
+};
+// ==============================================================================
+
+const emotion = new URLSearchParams(location.search).get("e");
+const liste = VIDEOS[emotion];
+
+if (!liste) {
+  document.getElementById("titre").textContent = "Scanne le QR code d'une enveloppe 🙂";
+  document.querySelector(".cadre").style.display = "none";
+} else {
+  document.getElementById("titre").textContent = TITRES[emotion] || "";
+  const cle = "derniere_" + emotion;
+  const derniere = localStorage.getItem(cle);
+  let choix = liste;
+  if (liste.length > 1) choix = liste.filter(v => v !== derniere);
+  const video = choix[Math.floor(Math.random() * choix.length)];
+  localStorage.setItem(cle, video);
+  document.getElementById("lecteur").src =
+    "https://www.youtube-nocookie.com/embed/" + video + "?rel=0";
+}
+</script>
+</body>
+</html>de
